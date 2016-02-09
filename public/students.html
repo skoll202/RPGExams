@@ -5,9 +5,10 @@
 $(document).ready(
 	function(){
 		$.get("getStudents",function(data,status) {
-			var r = new Array(), j = -1;
+		    data = JSON.parse(data);
+			var r = new Array(), j = 0;
 			for (var s in data) {
-				var id = data[s].data;
+				var id = data[s].studentID;
 				var firstName = data[s].firstName;
 				var lastName = data[s].lastName;
 				r[j++] = '<tr><td>';
@@ -18,12 +19,12 @@ $(document).ready(
 				r[j++] = lastName;
 				r[j++] = '</td></tr>';
 			}
-			 $('#studentTable').html(r.join('')); 
+			 $('#studentTable').html(r.join(''));
 		});
 });
   </script>
 </head>
 <body>
-<table id='studentTable'></table>
+<table id='studentTable' border=1></table>
 </body>
 </html>
