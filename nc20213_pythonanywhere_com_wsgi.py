@@ -23,7 +23,7 @@ class Root(object):
     index.exposed = True
     
     def students(self):
-        return open('./public/students.html')
+        return open('public/students.html')
     students.exposed = True
     
     def getStudents(self):
