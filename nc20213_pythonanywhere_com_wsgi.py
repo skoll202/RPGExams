@@ -2,6 +2,7 @@ import sys
 sys.stdout = sys.stderr
 
 import atexit
+import os
 import cherrypy
 import json
 import Game
@@ -28,5 +29,14 @@ class Root(object):
     def getStudents(self):
         return json.dumps(self.game.students)
     getStudents.exposed = True
-
-application = cherrypy.Application(Root(), script_name='', config=None)
+conf = {
+     '/': {
+         'tools.sessions.on': True,
+         'tools.staticdir.root': os.path.abspath(os.getcwd())
+     },
+     '/static': {
+         'tools.staticdir.on': True,
+         'tools.staticdir.dir': './public'
+     }
+ }
+application = cherrypy.Application(Root(), script_name='', config=conf)
