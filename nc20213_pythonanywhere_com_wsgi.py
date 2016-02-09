@@ -16,7 +16,8 @@ if cherrypy.__version__.startswith('3.0') and cherrypy.engine.state == 0:
 class Root(object):
 
     game = Game.Game()
-
+    def obj_dict(self,obj):
+        return obj.__dict__
 
     def index(self):
         return 'Hello World!'
@@ -27,7 +28,7 @@ class Root(object):
     students.exposed = True
 
     def getStudents(self):
-        return json.dumps(self.game.students)
+        return json.dumps(self.game.students,default=self.obj_dict)
     getStudents.exposed = True
 
 conf = {
