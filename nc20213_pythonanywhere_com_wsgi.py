@@ -14,25 +14,26 @@ if cherrypy.__version__.startswith('3.0') and cherrypy.engine.state == 0:
     atexit.register(cherrypy.engine.stop)
 
 class Root(object):
-    
+
     game = Game.Game()
-    
-    
+
+
     def index(self):
         return 'Hello World!'
     index.exposed = True
-    
+
     def students(self):
-        return open('public/students.html')
+        return open('/var/www/public/students.html')
     students.exposed = True
-    
+
     def getStudents(self):
         return json.dumps(self.game.students)
     getStudents.exposed = True
+
 conf = {
      '/': {
          'tools.sessions.on': True,
-         'tools.staticdir.root': os.path.abspath(os.getcwd())
+         'tools.staticdir.root': '/var/www'
      },
      '/static': {
          'tools.staticdir.on': True,
