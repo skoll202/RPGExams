@@ -2,14 +2,25 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script>
-$(document).ready(function(){
-$.get("getStudents",function(data,status) {
-	alert(data)
+$(document).ready(
+	function(){
+		$.get("getStudents",function(data,status) {
+			var r = new Array(), j = -1;
+			 for (var key=0, size=data.length; key<size; key++){
+			     r[++j] ='<tr><td>';
+			     r[++j] = data[key][0];
+			     r[++j] = '</td><td class="whatever1">';
+			     r[++j] = data[key][1];
+			     r[++j] = '</td><td class="whatever2">';
+			     r[++j] = data[key][2];
+			     r[++j] = '</td></tr>';
+			 }
+			 $('#studentTable').html(r.join('')); 
+		});
 });
-};
   </script>
 </head>
 <body>
-<div id='fillMe'></div>
+<table id='studentTable'></table>
 </body>
 </html>
