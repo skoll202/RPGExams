@@ -1,0 +1,171 @@
+<html>
+    <head>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script>
+
+            function addCourse() {
+                var courseName = $("#newCourseName").val()
+
+                jQuery.ajax({
+                    'type'        : 'POST',
+                    'dataType'    : 'JSON',
+                    'contentType' : 'application/json',
+                    'url'         : 'postCourse',
+                    'data'        : JSON.stringify({'courseName': courseName}),
+                    'success'   :   function() {courseAdded();}
+                });
+             }
+
+             function courseAdded() {
+                 alert("Course Added Successfully");
+                 updateCourseTable();
+             }
+
+             function removeCourse(id) {
+                jQuery.ajax({
+                    'type'        : 'POST',
+                    'dataType'    : 'JSON',
+                    'contentType' : 'application/json',
+                    'url'         : 'removeCourse',
+                    'data'        : JSON.stringify({'id': id}),
+                    'success'   :   function() {courseRemoved();}
+                });
+             }
+
+             function courseRemoved() {
+                 alert("Course Removed Successfully");
+                 updateCourseTable();
+             }
+
+            function updateCourseTable(){
+        		$.get("getCourses",function(data,status) {
+        		    data = JSON.parse(data);
+        			var r = new Array(), j = 0;
+        			for (var s in data) {
+        				var id = data[s].idNumber;
+        				var courseName = data[s].name;
+        				r[j++] = '<tr><td>';
+        				r[j++] = id;
+        				r[j++] = '</td><td>';
+        				r[j++] = courseName;
+        				r[j++] = '</td><td><a href="#" onclick="editCourse('+id+')"><img src="public/edit.png" width="20" height="20"></a>';
+        				r[j++] = '</td><td><a href="#" onclick="manageStudents('+id+')"><img src="public/students.png" width="20" height="20"></a>';
+        				r[j++] = '</td><td><a href="#" onclick="removeCourse('+id+')"><img src="public/remove.png" width="20" height="20"></a></td></tr>';
+        			}
+        			 $('#courseTable').html(r.join(''));
+        		});
+            }
+
+            function manageStudents(id) {
+                updateStudentTable(id);
+                console.log(id);
+                $( "#manageStudentsDiv" ).dialog({ modal: true });
+                //document.getElementById("manageStudentsDiv").style.visibility='visible';
+            }
+
+            function addStudentToCourse(studentID,courseID) {
+                jQuery.ajax({
+                    'type'        : 'POST',
+                    'dataType'    : 'JSON',
+                    'contentType' : 'application/json',
+                    'url'         : 'postStudentToCourse',
+                    'data'        : JSON.stringify({'studentID': studentID,'courseID':courseID}),
+                    'success'   :   function() {studentAdded(courseID);}
+                });
+            }
+
+            function removeStudentFromCourse(studentID,courseID) {
+                jQuery.ajax({
+                    'type'        : 'POST',
+                    'dataType'    : 'JSON',
+                    'contentType' : 'application/json',
+                    'url'         : 'removeStudentFromCourse',
+                    'data'        : JSON.stringify({'studentID': studentID,'courseID':courseID}),
+                    'success'   :   function() {studentRemoved(courseID);}
+                });
+            }
+
+
+
+            function updateStudentTable(courseID){
+        		$.get("getStudents",function(data,status) {
+        		    fullData = JSON.parse(data);
+        		    $.get("getStudentsFromCourse/"+courseID,function(data,status) {
+        		        data = JSON.parse(data);
+        		        console.log(courseID);
+        		        console.log(data);
+            			var r = new Array(), j = 0;
+            			for (var s in fullData) {
+            				var id = fullData[s].studentID;
+            				var firstName = fullData[s].firstName;
+            				var lastName = fullData[s].lastName;
+            				r[j++] = '<tr><td>';
+            				r[j++] = id;
+            				r[j++] = '</td><td>';
+            				r[j++] = firstName;
+            				r[j++] = '</td><td>';
+            				r[j++] = lastName;
+            				isInCourse = 0;
+            				for (var cs in data) {
+            				    //console.log(data[cs])
+            				    //console.log("comparing "+cs.studentID+" and "+id)
+            				    if (data[cs].studentID==id) {
+            				        console.log("match")
+            				        isInCourse = 1;
+            				        break;
+            				    }
+            				}
+            				if (isInCourse==1) {
+            				    r[j++] = '</td><td><a href="#" onclick="removeStudentFromCourse('+id+','+courseID+')"><img src="public/remove.png" width="20" height="20"></a></td></tr>';
+            				}
+            				else {
+            				    r[j++] = '</td><td><a href="#" onclick="addStudentToCourse('+id+','+courseID+')"><img src="public/add.png" width="20" height="20"></a></td></tr>';
+            				}
+            				isInCourse=0;
+            			}
+            			$('#studentTable').html(r.join(''));
+        		    })
+
+        		});
+            }
+
+            function studentAdded(courseID) {
+                updateStudentTable(courseID);
+            }
+
+            function studentRemoved(courseID) {
+                updateStudentTable(courseID);
+            }
+
+            function closeScreen() {
+                document.getElementById("manageStudentsDiv").style.display='none';
+            }
+        </script>
+        <script>
+            $(document).ready(
+            	updateCourseTable()
+            );
+        </script>
+    </head>
+    <body>
+        <div style='display:none' id='manageStudentsDiv' title='Manage Students'>
+            <table id='studentTable'></table>
+        </div>
+        <table id='addCourseTable'>
+            <tr>
+                <td>
+                    Add Course:
+                </td>
+                <td>
+                    <input type='text' id='newCourseName' placeholder='Course Name'/>
+                </td>
+                <td>
+                    <input type='button' id='newCourseButton' value='Submit' onclick='addCourse()'/>
+                </td>
+            </tr>
+        </table>
+        <table id='courseTable'></table>
+    </body>
+</html>

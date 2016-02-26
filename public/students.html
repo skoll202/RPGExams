@@ -2,8 +2,32 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script>
-$(document).ready(
-	function(){
+function addStudent() {
+         var firstName = $("#firstName").val()
+         var lastName = $("#lastName").val()
+
+         jQuery.ajax({
+    'type'        : 'POST',
+    'dataType'    : 'JSON',
+    'contentType' : 'application/json',
+    'url'         : 'postStudent',
+    'data'        : JSON.stringify({'firstName': firstName,'lastName': lastName}),
+    'success'   :   function() {studentAdded();}
+ });
+
+     }
+
+function removeStudent(id) {
+    jQuery.ajax({
+    'type'        : 'POST',
+    'dataType'    : 'JSON',
+    'contentType' : 'application/json',
+    'url'         : 'removeStudent',
+    'data'        : JSON.stringify({'id': id}),
+    'success'   :   function() {studentRemoved();}
+ });
+}
+function updateStudentTable(){
 		$.get("getStudents",function(data,status) {
 		    data = JSON.parse(data);
 			var r = new Array(), j = 0;
@@ -17,14 +41,39 @@ $(document).ready(
 				r[j++] = firstName;
 				r[j++] = '</td><td>';
 				r[j++] = lastName;
-				r[j++] = '</td></tr>';
+				r[j++] = '</td><td><a href="#" onclick="editStudent('+id+')"><img src="public/edit.png" width="20" height="20"></a>';
+				r[j++] = '</td><td><a href="#" onclick="removeStudent('+id+')"><img src="public/remove.png" width="20" height="20"></a></td></tr>';
 			}
-			 $('#studentTable').html(r.join(''));
+			$('#studentTable').html(r.join(''));
 		});
-});
+}
+$(document).ready(
+	updateStudentTable()
+);
   </script>
+ <script>
+
+     function studentAdded() {
+         alert("Student Added Successfully!");
+         $("#firstName").val("");
+         $("#lastName").val("");
+         updateStudentTable();
+     }
+
+     function studentRemoved() {
+         alert("Student Removed Successfully!");
+         updateStudentTable();
+     }
+ </script>
 </head>
 <body>
-<table id='studentTable' border=1></table>
+<table id='addStudentTable' border=0>
+<tr>
+<td>Add Student:</td>
+<td><input type='text' id='firstName' placeholder='First Name'></td>
+<td><input type='text' id='lastName' placeholder='Last Name'></td>
+<td><input type='button' id='addStudentButton' value='Add' onclick='addStudent()'>
+<tr>
+<table id='studentTable' border=0></table>
 </body>
 </html>

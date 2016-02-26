@@ -20,18 +20,26 @@ class Student(object):
             self.studentID=self.getStudentID()
         else:
             self.studentID=studentID
-    
+
     def getStudentID(self):
-        return 0
-    
-    
-    
-    
+        return self.studentID
+
+
+
+
 class Course(object):
     '''
     classdocs
     '''
-    
-    def __init__(self,name='',students=[]):
+    def __init__(self,idNumber=-1,name='',students={}):
+        self.idNumber=idNumber
         self.name = name
         self.students = students
+
+
+
+
+
+
+
+
