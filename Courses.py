@@ -35,6 +35,10 @@ class Course(object):
         self.idNumber=idNumber
         self.name = name
         self.students = students
+        self.objectives=[]
+        
+    def addObjective(self,objective):
+        self.objectives.append(objective.objectiveID)
 
 
 

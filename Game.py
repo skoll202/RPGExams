@@ -6,6 +6,7 @@ Created on Feb 9, 2016
 
 import Courses
 import sys
+import Exams
 
 class Game(object):
     '''
@@ -13,6 +14,9 @@ class Game(object):
     '''
     students={}
     courses={}
+    objectives={}
+    exams={}
+    questions={}
 
     def __init__(self):
         '''
@@ -36,9 +40,60 @@ class Game(object):
                 unique=True
         course = Courses.Course(availableID,courseName)
         course.students={}
+        course.objectives={}
         self.courses[availableID]=course
         self.save()
-
+        
+    def addObjective(self,objectiveID="",objectiveDescription="",courseID=[]):
+        #check to make sure objective ID is unique
+        if objectiveID not in self.objectives.keys():
+            objective = Exams.Objective(objectiveID,[])
+            self.objectives[objectiveID] = objective
+            self.objectives[objectiveID].questions=[]
+            for c in courseID:
+                self.courses[c].addObjective(objective)
+        else:
+            raise ValueError('ObjectiveID was given that already exists on the database.')
+        
+    def removeObjective(self,objectiveID):
+        for c in self.courses.keys():
+            if objectiveID in self.courses[c].objectives:
+                self.courses[c].remove(objectiveID)
+        if objectiveID in self.objectives.keys():
+            self.objectives.pop(objectiveID,None)
+            
+    def addQuestionToObjective(self,questionID,objectiveID):
+        self.objectives[objectiveID].questions.append(questionID)
+        
+    def addQuestion(self,questionText="",correctAnswers=[],incorrectAnswer=[],objectiveIDs=[]):
+        availableID = 0
+        unique=False
+        #Check for available course id number
+        while not unique:
+            test = True
+            for q in self.questions.keys():
+                if int(q)==availableID:
+                    test=False
+                    break
+            if test==False:
+                availableID+=1
+            else:
+                unique=True
+        question = Exams.Question(availableID,questionText,correctAnswers,incorrectAnswer)
+        
+        #add the question ID to the question list of any objective it should be associated with
+        for o in objectiveIDs:
+            self.objectives[o].questions.append(availableID)
+        self.questions[availableID] = question
+    
+    def removeQuestion(self,questionID):
+        self.questions.pop(questionID,None)
+        
+        #Remove the question ID from any objectives it is associated with
+        for o in self.objectives.keys():
+            if questionID in self.objectives[o].questions:
+                self.objectives[o].questions.remove(questionID)
+        
     def removeCourse(self,idNumber):
         for c in self.courses.keys():
             if str(c)==str(idNumber):
@@ -173,6 +228,7 @@ class Game(object):
                 name=name.rstrip()
                 course = Courses.Course(idNumber,name)
                 course.students={}
+                course.objectives={}
                 self.courses[idNumber] = course
                 print >> sys.stderr, "*****************Changing course to %s" % (name)
         courseFile.close()

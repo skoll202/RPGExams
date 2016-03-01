@@ -8,23 +8,19 @@ class Question(object):
     '''
     classdocs
     '''
-
-
-    def __init__(self, question="",correctAnswers=[],incorrectAnswers=[],catagories=[]):
+    def __init__(self, idNumber=-1,question="",correctAnswers=[],incorrectAnswers=[]):
         '''
         Constructor
         '''
         self.question = question
         self.correctAnswers = correctAnswers
         self.incorrectAnswers = incorrectAnswers
-        self.catagories = catagories
         
         
 class Exam(object):
     '''
     classdocs
     '''
-    
     def __init__(self,questions=[],catagories=[],numQuestions=0,students=[]):
         self.questions = questions
         self.catagories = catagories
@@ -32,14 +28,9 @@ class Exam(object):
         self.students = students
         
         
-class Catagory(object):
-    '''
-    classdocs
-    '''
     
-    def __init__(self,name=""):
-        self.name = name
-        self.idNum=self.getID()
-        
-    def getID(self):
-        return 0
+class Objective(object):
+    def __init__(self,objectiveID="",description="",questions=[]):
+        self.objectiveID=objectiveID
+        self.questions=questions
+        self.description = description

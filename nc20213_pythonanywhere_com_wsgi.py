@@ -30,9 +30,21 @@ class Root(object):
         return open('/var/www/public/courses.html')
     courses.exposed = True
 
-    def catagories(self):
-        return open('/var/www/public/catagories.html')
-    catagories.exposed = True
+    def objectives(self):
+        return open('/var/www/public/objectives.html')
+    objectives.exposed = True
+    
+    def getObjectives(self):
+        return json.dumps(self.game.objectives,default=self.obj_dict)
+    getObjectives.exposed = True
+    
+    def getQuestions(self):
+        return json.dumps(self.game.questions,default=self.obj_dict)
+    getQuestions.exposed = True
+    
+    def getExams(self):
+        return json.dumps(self.game.exams,default=self.obj_dict)
+    getExams.exposed = True
 
     def getStudents(self):
         return json.dumps(self.game.students,default=self.obj_dict)
@@ -55,6 +67,43 @@ class Root(object):
     def postCourse(self):
         input_json = cherrypy.request.json
         self.game.addCourse(input_json['courseName'])
+        
+    
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
+    def postObjective(self):
+        input_json = cherrypy.request.json
+        self.game.addObjective(input_json['objectiveID'],input_json['objectiveDescription'],{})
+        
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
+    def removeObjective(self):
+        input_json = cherrypy.request.json
+        self.game.removeObjective(input_json['objectiveID'])
+        
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
+    def postQuestionToObjective(self):
+        input_json = cherrypy.request.json
+        self.game.removeObjective(input_json['questionID'],input_json['objectiveID'])
+        
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
+    def postQuestion(self):
+        inputJson = cherrypy.request.json
+        self.game.addQuestion(inputJson['questionText'],inputJson['correctAnswers'],inputJson['incorrectAnswers'])
+        
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    @cherrypy.tools.json_in()
+    def removeQuestion(self):
+        input_json = cherrypy.request.json
+        self.game.removeQuestion(input_json['questionID'])
 
     @cherrypy.expose
     @cherrypy.tools.json_out()
@@ -95,6 +144,19 @@ class Root(object):
         input_json = cherrypy.request.json
         self.game.removeStudent(input_json['id'])
 
+class Student(object):
+    def __init__(self,game):
+        self.game = game
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def GET(self,id):
+        student = self.game.students[id]
+        return dict(student)
+
+root=Root()
+root.student = Student()
+
 
 conf = {
      '/': {
@@ -103,7 +165,8 @@ conf = {
      },
      '/static': {
          'tools.staticdir.on': True,
-         'tools.staticdir.dir': './public'
+         'tools.staticdir.dir': './public',
+         'request.dispatch': cherrypy.dispatch.MethodDispatcher()
      }
  }
-application = cherrypy.Application(Root(), script_name='', config=conf)
+application = cherrypy.Application(root, script_name='', config=conf)
