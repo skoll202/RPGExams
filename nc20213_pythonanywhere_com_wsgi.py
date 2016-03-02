@@ -162,10 +162,77 @@ class Student(object):
         print >> sys.stderr, "*****************Im running!"
         student = self.game.getStudent(id)
         return student.__dict__
+    
+    @cherrypy.tools.json_in()
+    def POST(self):
+        input_json = cherrypy.request.json
+        self.game.addStudent(input_json['firstName'],input_json['lastName'])
+    
+    def REMOVE(self):
+        pass
+    
+    def PUT(self):
+        pass
 
+class Course(object):
+    exposed=True
+    def __init__(self,game):
+        self.game = game
+    def GET(self,id):
+        pass
+    def POST(self):
+        pass
+    def PUT(self):
+        pass
+    def REMOVE(self):
+        pass
+    
+class Objective(object):
+    exposed=True
+    def __init__(self,game):
+        self.game = game
+    def GET(self,id):
+        pass
+    def POST(self):
+        pass
+    def PUT(self):
+        pass
+    def REMOVE(self):
+        pass
+    
+    
+class Question(object):
+    exposed=True
+    def __init__(self,game):
+        self.game = game
+    def GET(self,id):
+        pass
+    def POST(self):
+        pass
+    def PUT(self):
+        pass
+    def REMOVE(self):
+        pass
+    
+class Exam(object):
+    exposed=True
+    def __init__(self,game):
+        self.game = game
+    def GET(self,id):
+        pass
+    def POST(self):
+        pass
+    def PUT(self):
+        pass
+    def REMOVE(self):
+        pass
 
 root=Root()
 root.student = Student(root.game)
+root.question = Question(root.game)
+root.exam = Exam(root.game)
+root.objective = Objective(root.game)
+root.course = Course(root.game)
 
 
 
