@@ -146,6 +146,7 @@ class Root:
 
     def GET(self):
         return "Hello"
+    
     def POST(self):
         return "Hello"
 

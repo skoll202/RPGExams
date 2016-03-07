@@ -1,0 +1,364 @@
+<html>
+	<head>
+		<link href='https://fonts.googleapis.com/css?family=Candal' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+		<style>
+			body 
+			{
+				background-color: #012830;
+				background-image: url("bg.png");
+				color:#ffffff;
+			}
+			.console 
+			{
+				background-image: url("console.png");
+				background-size:100% 100%;
+				background-repeat:no-repeat;
+			}
+			.topConsole 
+			{
+				background-image: url("topRect.png");
+				background-size:100% 100%;
+				background-repeat:no-repeat;
+			}
+			.bottomConsole 
+			{
+				background-image: url("bottomRect.png");
+				background-size:100% 100%;
+				background-repeat:no-repeat;
+			}
+			.middleConsole
+			{
+				text-align:center;
+				overflow:auto;
+			}
+			.consoleList
+			{				
+				color:#999999;
+				width:95%;
+				height:80%;		
+				overflow:auto;
+				position:relative;	
+				top:1%;	
+			}
+			.mCSB_draggerRail
+			{ 
+				height: 30%px; 
+			}
+			#mCSB_1_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
+			#mCSB_2_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
+			#mCSB_3_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
+			#mCSB_4_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
+			#mCSB_5_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
+			ul
+			{
+				list-style-type: none;
+			}
+			.divTitle
+			{
+				color:#ffffff;
+				position:relative;
+				top:1%;
+				left:32%;
+				font-family: 'Candal', sans-serif;
+				font-size:200%;
+			}
+			#console1
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:1%;
+			}
+			#console2
+			{
+				width:56%;
+				height:20%;
+				position:absolute;
+				left:22%;
+				text-align:center;
+			}
+			#console3
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:79%;
+			}
+			#console4
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:1%;
+				top:33%;
+			}
+			#console5
+			{
+				width:56%;
+				height:56%;
+				position:absolute;
+				left:22%;
+				top:22%;
+			}
+			#console6
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:79%;
+				top:33%;
+			}
+			#console7
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:1%;
+				top:65%;
+			}
+			#console8
+			{
+				width:56%;
+				height:15%;
+				position:absolute;
+				left:22%;
+				top:80%;
+			}
+			#console9
+			{
+				width:20%;
+				height:30%;
+				position:absolute;
+				left:79%;
+				top:65%;
+			}
+			.active
+			{
+				color:#ffffff;
+			}
+			.mainTitle
+			{
+				color:#ffffff;
+				font-family: 'Candal', sans-serif;
+				font-size:200%;
+				position:relative;
+				top:20%;
+			}
+			.middleConsoleDiv
+			{
+				display:none;
+			}
+			.activeDiv
+			{
+				display:inline;
+			}
+		</style>
+		<script>
+		    (function($){
+		        $(window).load(function(){
+		            $(".consoleList").mCustomScrollbar({theme:"minimal",autoHideScrollbar:true});
+		        });
+		    })(jQuery);
+		</script>
+		<script>
+			function drawCourseConsole()
+			{
+				getList(
+						'course',
+						function(data) 
+						{
+							console.log(data);
+						}
+				);
+			}
+			function drawStudentConsole()
+			{
+				
+			}
+			function drawExamConsole()
+			{
+				
+			}
+			function drawObjectiveConsole()
+			{
+				getList(
+						'objective',
+						function(data) 
+						{
+							console.log(data);
+						}
+				);
+			}
+			function getList(site,callback)
+			{
+				$.get(site,function(data,status) {
+				    data = JSON.parse(data);
+				    callback & callback(data);
+				});	
+			}
+			
+			function courseSelected(el)
+			{
+				$('.course').removeClass('active');
+				$(el).addClass('active');
+				var course = $(el).text();
+				$("#console2").html("<span id='title' class='mainTitle'>"+course+"</span>");
+				$('.middleConsoleDiv').removeClass('activeDiv');
+				$('#courseDiv').addClass('activeDiv');
+			}
+			function studentSelected(el)
+			{
+				$('.student').removeClass('active');
+				$(el).addClass('active');
+			}
+			function examSelected(el)
+			{
+				$('.exam').removeClass('active');
+				$(el).addClass('active');
+			}
+			function objectiveSelected(el)
+			{
+				$('.objective').removeClass('active');
+				$(el).addClass('active');
+			}
+		</script>
+	</head>
+	<body>
+		<div class="console" id="console1">
+			<span class="divTitle">Course</span>
+			<div id='courseList' class='consoleList'>
+				<ul>
+					<li onclick=courseSelected(this) class='course'>Temp Course 1</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+					<li onclick=courseSelected(this) class='course'>Temp Course 2</li>
+				</ul>
+			</div>
+		</div>
+		<div class="topConsole" id="console2">
+		</div>
+		<div class="console" id="console3">
+			<span class="divTitle">Objective</span>
+			<div id='objectiveList' class='consoleList'>
+				<ul>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 1</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+					<li onclick=objectiveSelected(this) class='objective'>Objective 2</li>
+				</ul>
+			</div>
+		</div>
+		<div class="console" id="console4">
+			<span class="divTitle">Student</span>
+			<div id='studentList' class='consoleList'>
+				<ul>
+					<li onclick=studentSelected(this) class='student'>Student 1</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+					<li onclick=studentSelected(this) class='student'>Student 2</li>
+				</ul>
+			</div>
+		</div>
+		<div class="middleConsole" id="console5">
+			<div class="middleConsoleDiv" id='courseDiv'>
+				A Course has been selected
+			</div>
+		</div>
+		<div class="console" id="console6"><span class="divTitle"></span>
+		</div>
+		<div class="console" id="console7">
+			<span class="divTitle">Exam</span>
+			<div id='examList' class='consoleList'>
+				<ul>
+					<li onclick=examSelected(this) class='exam'>Exam 1</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+					<li onclick=examSelected(this) class='exam'>Exam 2</li>
+				</ul>
+			</div>
+		</div>
+		<div class="bottomConsole" id="console8">
+		</div>
+		<div class="console" id="console9"><span class="divTitle"></span>
+		</div>
+	</body>
+</html>
