@@ -1,0 +1,43 @@
+@CHARSET "ISO-8859-1";
+
+div.console {
+	float:left;
+	border-radius:25px;
+	border:2px solid #ffffff;
+}
+#console1 {
+	width:20%;
+	height:33%;
+}
+#console2 {
+	width:58%;
+	height:20%;
+}
+#console3 {
+	width:20%;
+	height:33%;
+}
+#console4 {
+	width:20%;
+	height:30%;
+}
+#console5 {
+	width:58%;
+	height:60%;
+}
+#console6 {
+	width:20%;
+	height:33%;
+}
+#console7 {
+	width:20%;
+	height:33%;
+}
+#console8 {
+	width:60%;
+	height:20%;
+}
+#console9 {
+	width:20%;
+	height:33%;
+}

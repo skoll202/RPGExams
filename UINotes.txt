@@ -1,0 +1,44 @@
+Teacher Requirements:
+log in
+create exam
+	Add question
+	add objective
+		set number of questions from objective
+	add time limit
+	add retake options
+	add passing score
+	add close date
+	add open date
+	generate exam button
+add question
+	question text
+	possible answers
+	question type
+	correct answers
+	weight/points
+	objective
+upload questions from file
+	provide template
+	allow file submission
+assign exam to course or courses
+assign exam to specific students
+add student
+remove student
+edit student
+assign student to course
+create course
+edit course
+remove course
+view results for student
+view results for exam
+view objective results
+create objective
+edit objective
+remove objective
+
+Student Requirements:
+log in
+see exams available to take
+take exam
+see exam results
+see objective results

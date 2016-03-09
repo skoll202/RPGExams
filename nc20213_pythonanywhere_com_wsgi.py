@@ -125,6 +125,7 @@ class Root:
     @cherrypy.expose
     def GET(self):
         return "Hello"
+    
     def POST(self):
         return "Hello"
 
