@@ -72,6 +72,11 @@
 				height:30%px;
 				top:55px;
 			}
+			#mCSB_6_scrollbar_vertical
+			{
+				height:30%px;
+				top:55px;
+			}
 			ul
 			{
 				list-style-type: none;
@@ -155,6 +160,66 @@
 				left:79%;
 				top:65%;
 			}
+			#attendanceConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				left:0%;
+				text-align:center;
+				float:left;
+			}
+			#controlExamConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				left:0%;
+				text-align:center;
+				float:left;
+			}
+			#creditConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				text-align:center;
+				float:right;
+			}
+			#recentObjectivesConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				left:0%;
+				text-align:center;
+				float:left;
+			}
+			#recentExamsConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				left:0%;
+				text-align:center;
+				float:right;
+			}
+			#objectiveResultsConsole
+			{
+				width:40%;
+				height:50%;
+				position:relative;
+				top:0%;
+				left:0%;
+				text-align:center;
+				float:left;
+			}
+			
 			.active
 			{
 				color:#ffffff;
@@ -166,6 +231,14 @@
 				font-size:200%;
 				position:relative;
 				top:20%;
+			}
+			.subDivTitle
+			{
+				color:#ffffff;
+				font-family: 'Candal', sans-serif;
+				font-size:200%;
+				position:relative;
+				top:.5%;
 			}
 			.middleConsoleDiv
 			{
@@ -184,6 +257,12 @@
 		    })(jQuery);
 		</script>
 		<script>
+			var selectedStudents = [];
+			var selectedExam = null;
+			var selectedCourse = null;
+			var selectedObjectives = [];
+			var selectedQuestion = null;
+			
 			function drawCourseConsole()
 			{
 				getList(
@@ -194,15 +273,15 @@
 						}
 				);
 			}
-			function drawStudentConsole()
+			function drawStudentConsole(courseName)
 			{
 				
 			}
-			function drawExamConsole()
+			function drawExamConsole(courseName)
 			{
 				
 			}
-			function drawObjectiveConsole()
+			function drawObjectiveConsole(courseName)
 			{
 				getList(
 						'objective',
@@ -211,6 +290,10 @@
 							console.log(data);
 						}
 				);
+			}
+			function drawQuestionConsole(courseName)
+			{
+				
 			}
 			function getList(site,callback)
 			{
@@ -222,26 +305,106 @@
 			
 			function courseSelected(el)
 			{
+				selectedStudents = [];
+				selectedExam = null;
+				selectedCourse = null;
+				selectedObjectives = [];
+				selectedQuestion = null;
+				course = $(el).text();
+				selectedCourse = course;
 				$('.course').removeClass('active');
-				$(el).addClass('active');
-				var course = $(el).text();
+				$('.student').removeClass('active');
+				$('.exam').removeClass('active');
+				$('.objective').removeClass('active');
+				
+				
+				drawStudentConsole(course);
+				drawExamConsole(course);
+				drawObjectiveConsole(course,drawQuestionConsole(course));
+				$(el).addClass('active');				
 				$("#console2").html("<span id='title' class='mainTitle'>"+course+"</span>");
 				$('.middleConsoleDiv').removeClass('activeDiv');
-				$('#courseDiv').addClass('activeDiv');
+				$('#attendanceConsole').addClass('activeDiv');
+				$('#recentObjectivesConsole').addClass('activeDiv');
+				$('#creditConsole').addClass('activeDiv');
+				$('#recentExamsConsole').addClass('activeDiv');
 			}
 			function studentSelected(el)
 			{
-				$('.student').removeClass('active');
-				$(el).addClass('active');
+				var student = $(el).text();
+				var alreadySelected = -1;
+				for (var i = 0;i<selectedStudents.length;i++)
+					{
+					if (selectedStudents[i]==student)
+						{
+						alreadySelected = i;
+						break;
+						}
+					}
+				if (alreadySelected>-1) 
+					{
+					selectedStudents.splice(alreadySelected,1);
+					$(el).removeClass('active');
+					}
+				else {
+					$(el).addClass('active');
+					selectedStudents.push(student);
+				}				
+				if (selectedStudents.length>0) {
+					var str = "<span id='title' class='mainTitle'>";
+					str+=selectedStudents[0];
+					for (var i=1;i<selectedStudents.length;i++) {
+						str+=",";
+						str+=selectedStudents[i];
+					}
+					str+="</span>";
+					$("#console2").html(str);
+				}				
+				
+				$('.middleConsoleDiv').removeClass('activeDiv');
+				$('#attendanceConsole').addClass('activeDiv');
+				$('#recentObjectivesConsole').addClass('activeDiv');
+				$('#creditConsole').addClass('activeDiv');
+				$('#recentExamsConsole').addClass('activeDiv');
 			}
 			function examSelected(el)
 			{
 				$('.exam').removeClass('active');
 				$(el).addClass('active');
+				var exam = $(el).text();
+				if (selectedStudents.length<1)
+					{
+						$("#console2").html("<span id='title' class='mainTitle'>"+exam+"</span>");
+						$('.middleConsoleDiv').removeClass('activeDiv');
+						$('#recentExamsConsole').addClass('activeDiv');
+					}
+				else
+					{
+						var str = "<span id='title' class='mainTitle'>"+exam+" for ";
+						str+=selectedStudents[0]
+						for (var i = 1;i<selectedStudents.length;i++)
+						{
+							str+=",";
+							str+=selectedStudents[i];							
+						}
+						str+="</span>"
+						$("#console2").html(str);
+						$('.middleConsoleDiv').removeClass('activeDiv');
+						$('#recentExamsConsole').addClass('activeDiv');
+						$('#controlExamConsole').addClass('activeDiv');
+						$('#objectiveResultsConsole').addClass('activeDiv');
+						
+					}
+				
 			}
 			function objectiveSelected(el)
 			{
 				$('.objective').removeClass('active');
+				$(el).addClass('active');
+			}
+			function questionSelected(el)
+			{
+				$('.question').removeClass('active');
 				$(el).addClass('active');
 			}
 		</script>
@@ -325,11 +488,49 @@
 			</div>
 		</div>
 		<div class="middleConsole" id="console5">
-			<div class="middleConsoleDiv" id='courseDiv'>
-				A Course has been selected
+			<div class="console middleConsoleDiv" id="attendanceConsole">
+				<span class="subDivTitle">Attendance</span>
+			</div>
+			<div class="console middleConsoleDiv" id="creditConsole">
+				<span class="subDivTitle">Credit Completion</span>
+			</div>
+			<div class="console middleConsoleDiv" id="recentObjectivesConsole">
+				<span class="subDivTitle">Recent Objectives</span>
+			</div>
+			<div class="console middleConsoleDiv" id="recentExamsConsole">
+				<span class="subDivTitle">Recent Exams</span>
+			</div>
+			<div class="console middleConsoleDiv" id="controlExamConsole">
+				<span class="subDivTitle">Controller</span>
+			</div>
+			<div class="console middleConsoleDiv" id="objectiveResultsConsole">
+				<span class="subDivTitle">Objectives</span>
 			</div>
 		</div>
-		<div class="console" id="console6"><span class="divTitle"></span>
+		<div class="console" id="console6">
+			<span class="divTitle">Question</span>
+			<div id='questionList' class='consoleList'>
+				<ul>
+					<li onclick=questionSelected(this) class='question'>Exam 1</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+					<li onclick=questionSelected(this) class='question'>Question 2</li>
+				</ul>
+			</div>
 		</div>
 		<div class="console" id="console7">
 			<span class="divTitle">Exam</span>
