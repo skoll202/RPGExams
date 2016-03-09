@@ -22,10 +22,6 @@ class Root:
         return 'Hello World!'
     index.exposed = True
 
-    def students(self):
-        return open('/var/www/public/students.html')
-    students.exposed = True
-
     def courses(self):
         return open('/var/www/public/courses.html')
     courses.exposed = True
@@ -45,10 +41,6 @@ class Root:
     def getExams(self):
         return json.dumps(self.game.exams,default=self.obj_dict)
     getExams.exposed = True
-
-    def getStudents(self):
-        return json.dumps(self.game.students,default=self.obj_dict)
-    getStudents.exposed = True
 
     def getStudentsFromCourse(self,courseID):
         students = self.game.getStudentsFromCourse(courseID)
@@ -131,23 +123,17 @@ class Root:
         self.game.removeCourse(input_json['id'])
 
     @cherrypy.expose
-    @cherrypy.tools.json_out()
-    @cherrypy.tools.json_in()
-    def postStudent(self):
-        input_json = cherrypy.request.json
-        self.game.addStudent(input_json['firstName'],input_json['lastName'])
-
-    @cherrypy.expose
-    @cherrypy.tools.json_out()
-    @cherrypy.tools.json_in()
-    def removeStudent(self):
-        input_json = cherrypy.request.json
-        self.game.removeStudent(input_json['id'])
-
     def GET(self):
         return "Hello"
     def POST(self):
         return "Hello"
+
+class UI(object):
+    exposed = True
+    def __init__(self,game):
+        self.game = game
+    def GET(self):
+        return open('/var/www/public/students.html')
 
 class Student(object):
     exposed=True
@@ -158,35 +144,60 @@ class Student(object):
         self.game = game
 
     @cherrypy.tools.json_out()
-    def GET(self,id):
-        print >> sys.stderr, "*****************Im running!"
-        student = self.game.getStudent(id)
-        return student.__dict__
-    
+    def GET(self,id=''):
+        returnData = None
+        if id=='':
+            returnData= json.dumps(self.game.students,default=self.obj_dict)
+        else:
+            student = self.game.getStudent(id)
+            returnData= student.__dict__
+        return returnData
+
     @cherrypy.tools.json_in()
     def POST(self):
         input_json = cherrypy.request.json
         self.game.addStudent(input_json['firstName'],input_json['lastName'])
-    
-    def REMOVE(self):
-        pass
-    
+        return "1"
+
+    def REMOVE(self,id=''):
+        if id!='':
+            self.game.removeStudent(id)
+            return "1"
+
     def PUT(self):
         pass
 
+
 class Course(object):
     exposed=True
+    def obj_dict(self,obj):
+        return obj.__dict__
     def __init__(self,game):
         self.game = game
-    def GET(self,id):
-        pass
+
+    @cherrypy.tools.json_out()
+    def GET(self,id=""):
+        returnData = None
+        if id=="":
+            returnData= json.dumps(self.game.courses,default=self.obj_dict)
+        else:
+            returnData=self.obj_dict(self.game.getCourse(id))
+        return returnData
+
+    @cherrypy.tools.json_in()
     def POST(self):
-        pass
+        input_json = cherrypy.request.json
+        self.game.addCourse(input_json['courseName'])
+        return "1"
+
     def PUT(self):
         pass
-    def REMOVE(self):
-        pass
-    
+
+    def REMOVE(self,id=''):
+        if id!='':
+            self.game.removeCourse(id)
+            return "1"
+
 class Objective(object):
     exposed=True
     def __init__(self,game):
@@ -199,8 +210,8 @@ class Objective(object):
         pass
     def REMOVE(self):
         pass
-    
-    
+
+
 class Question(object):
     exposed=True
     def __init__(self,game):
@@ -213,7 +224,7 @@ class Question(object):
         pass
     def REMOVE(self):
         pass
-    
+
 class Exam(object):
     exposed=True
     def __init__(self,game):
@@ -227,12 +238,15 @@ class Exam(object):
     def REMOVE(self):
         pass
 
+
+
 root=Root()
 root.student = Student(root.game)
 root.question = Question(root.game)
 root.exam = Exam(root.game)
 root.objective = Objective(root.game)
 root.course = Course(root.game)
+root.ui=UI(root.game)
 
 
 
