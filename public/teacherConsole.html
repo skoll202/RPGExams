@@ -4,257 +4,13 @@
 		<link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+		<script src="js/UI.js"></script>
+		<link rel="stylesheet" href="css/console.css" />
 		<style>
-			body 
-			{
-				background-color: #012830;
-				background-image: url("bg.png");
-				color:#ffffff;
-			}
-			.console 
-			{
-				background-image: url("console.png");
-				background-size:100% 100%;
-				background-repeat:no-repeat;
-			}
-			.topConsole 
-			{
-				background-image: url("topRect.png");
-				background-size:100% 100%;
-				background-repeat:no-repeat;
-			}
-			.bottomConsole 
-			{
-				background-image: url("bottomRect.png");
-				background-size:100% 100%;
-				background-repeat:no-repeat;
-			}
-			.middleConsole
-			{
-				text-align:center;
-				overflow:auto;
-			}
-			.consoleList
-			{				
-				color:#999999;
-				width:95%;
-				height:80%;		
-				overflow:auto;
-				position:relative;	
-				top:1%;	
-			}
-			.mCSB_draggerRail
-			{ 
-				height: 30%px; 
-			}
-			#mCSB_1_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			#mCSB_2_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			#mCSB_3_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			#mCSB_4_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			#mCSB_5_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			#mCSB_6_scrollbar_vertical
-			{
-				height:30%px;
-				top:55px;
-			}
-			ul
-			{
-				list-style-type: none;
-			}
-			.divTitle
-			{
-				color:#ffffff;
-				position:relative;
-				top:1%;
-				left:32%;
-				font-family: 'Candal', sans-serif;
-				font-size:200%;
-			}
-			#console1
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:1%;
-			}
-			#console2
-			{
-				width:56%;
-				height:20%;
-				position:absolute;
-				left:22%;
-				text-align:center;
-			}
-			#console3
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:79%;
-			}
-			#console4
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:1%;
-				top:33%;
-			}
-			#console5
-			{
-				width:56%;
-				height:56%;
-				position:absolute;
-				left:22%;
-				top:22%;
-			}
-			#console6
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:79%;
-				top:33%;
-			}
-			#console7
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:1%;
-				top:65%;
-			}
-			#console8
-			{
-				width:56%;
-				height:15%;
-				position:absolute;
-				left:22%;
-				top:80%;
-			}
-			#console9
-			{
-				width:20%;
-				height:30%;
-				position:absolute;
-				left:79%;
-				top:65%;
-			}
-			#attendanceConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				left:0%;
-				text-align:center;
-				float:left;
-			}
-			#controlExamConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				left:0%;
-				text-align:center;
-				float:left;
-			}
-			#creditConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				text-align:center;
-				float:right;
-			}
-			#recentObjectivesConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				left:0%;
-				text-align:center;
-				float:left;
-			}
-			#recentExamsConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				left:0%;
-				text-align:center;
-				float:right;
-			}
-			#objectiveResultsConsole
-			{
-				width:40%;
-				height:50%;
-				position:relative;
-				top:0%;
-				left:0%;
-				text-align:center;
-				float:left;
-			}
-			
-			.active
-			{
-				color:#ffffff;
-			}
-			.mainTitle
-			{
-				color:#ffffff;
-				font-family: 'Candal', sans-serif;
-				font-size:200%;
-				position:relative;
-				top:20%;
-			}
-			.subDivTitle
-			{
-				color:#ffffff;
-				font-family: 'Candal', sans-serif;
-				font-size:200%;
-				position:relative;
-				top:.5%;
-			}
-			.middleConsoleDiv
-			{
-				display:none;
-			}
-			.activeDiv
-			{
-				display:inline;
-			}
+
 		</style>
 		<script>
-		    (function($){
-		        $(window).load(function(){
-		            $(".consoleList").mCustomScrollbar({theme:"minimal",autoHideScrollbar:true});
-		        });
-		    })(jQuery);
+
 		</script>
 		<script>
 			var selectedStudents = [];
@@ -262,12 +18,12 @@
 			var selectedCourse = null;
 			var selectedObjectives = [];
 			var selectedQuestion = null;
-			
+
 			function drawCourseConsole()
 			{
 				getList(
 						'course',
-						function(data) 
+						function(data)
 						{
 							console.log(data);
 						}
@@ -275,17 +31,17 @@
 			}
 			function drawStudentConsole(courseName)
 			{
-				
+
 			}
 			function drawExamConsole(courseName)
 			{
-				
+
 			}
 			function drawObjectiveConsole(courseName)
 			{
 				getList(
 						'objective',
-						function(data) 
+						function(data)
 						{
 							console.log(data);
 						}
@@ -293,16 +49,16 @@
 			}
 			function drawQuestionConsole(courseName)
 			{
-				
+
 			}
 			function getList(site,callback)
 			{
 				$.get(site,function(data,status) {
 				    data = JSON.parse(data);
 				    callback & callback(data);
-				});	
+				});
 			}
-			
+
 			function courseSelected(el)
 			{
 				selectedStudents = [];
@@ -316,12 +72,12 @@
 				$('.student').removeClass('active');
 				$('.exam').removeClass('active');
 				$('.objective').removeClass('active');
-				
-				
+
+
 				drawStudentConsole(course);
 				drawExamConsole(course);
 				drawObjectiveConsole(course,drawQuestionConsole(course));
-				$(el).addClass('active');				
+				$(el).addClass('active');
 				$("#console2").html("<span id='title' class='mainTitle'>"+course+"</span>");
 				$('.middleConsoleDiv').removeClass('activeDiv');
 				$('#attendanceConsole').addClass('activeDiv');
@@ -341,7 +97,7 @@
 						break;
 						}
 					}
-				if (alreadySelected>-1) 
+				if (alreadySelected>-1)
 					{
 					selectedStudents.splice(alreadySelected,1);
 					$(el).removeClass('active');
@@ -349,7 +105,7 @@
 				else {
 					$(el).addClass('active');
 					selectedStudents.push(student);
-				}				
+				}
 				if (selectedStudents.length>0) {
 					var str = "<span id='title' class='mainTitle'>";
 					str+=selectedStudents[0];
@@ -359,8 +115,8 @@
 					}
 					str+="</span>";
 					$("#console2").html(str);
-				}				
-				
+				}
+
 				$('.middleConsoleDiv').removeClass('activeDiv');
 				$('#attendanceConsole').addClass('activeDiv');
 				$('#recentObjectivesConsole').addClass('activeDiv');
@@ -385,7 +141,7 @@
 						for (var i = 1;i<selectedStudents.length;i++)
 						{
 							str+=",";
-							str+=selectedStudents[i];							
+							str+=selectedStudents[i];
 						}
 						str+="</span>"
 						$("#console2").html(str);
@@ -393,9 +149,9 @@
 						$('#recentExamsConsole').addClass('activeDiv');
 						$('#controlExamConsole').addClass('activeDiv');
 						$('#objectiveResultsConsole').addClass('activeDiv');
-						
+
 					}
-				
+
 			}
 			function objectiveSelected(el)
 			{
